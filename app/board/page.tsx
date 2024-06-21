@@ -15,8 +15,8 @@ export default function BoardPage() {
           2024年○月
           <FaCircleChevronRight />
         </div>
-        <div className="flex w-full h-[80vh]">
-          <div className="border-2 border-b-green-500 w-full text-center">
+        <div className="flex w-full h-[80vh] space-x-1">
+          <div className="border-2 w-full text-center">
             <p className="font-bold text-xl">月</p>
             <p>○日</p>
             <div className="flex flex-col border-4 rouded-md text-left p-2">
@@ -25,33 +25,33 @@ export default function BoardPage() {
               <p>内容</p>
             </div>
           </div>
-          <div className="border-2 border-b-green-500 w-full text-center">
+          <div className="border-2  w-full text-center">
             <p className="font-bold text-xl">火</p>
             <p>○日</p>
           </div>
-          <div className="border-2 border-b-green-500 w-full text-center">
+          <div className="border-2 w-full text-center">
             <p className="font-bold text-xl">水</p>
             <p>○日</p>
           </div>
-          <div className="border-2 border-b-green-500 w-full text-center">
+          <div className="border-2 w-full text-center">
             <p className="font-bold text-xl">木</p>
             <p>○日</p>
           </div>
-          <div className="border-2 border-b-green-500 w-full text-center">
+          <div className="border-2 w-full text-center">
             <p className="font-bold text-xl">金</p>
             <p>○日</p>
           </div>
-          <div className="border-2 border-b-green-500 w-full text-center">
+          <div className="border-2 w-full text-center">
             <p className="font-bold text-xl text-blue-700">土</p>
             <p>○日</p>
           </div>
-          <div className="border-2 border-b-green-500 w-full text-center">
+          <div className="border-2 w-full text-center">
             <p className="font-bold text-xl text-red-700">日</p>
             <p>○日</p>
           </div>
         </div>
         <div className="flex text-3xl w-full justify-between mt-5">
-          <Link href="/create">
+          <Link href="/schedule">
             <FaRegSquarePlus />
           </Link>
           <Link href="/">
