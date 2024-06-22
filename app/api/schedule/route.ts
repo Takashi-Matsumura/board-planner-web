@@ -18,11 +18,14 @@ export const POST = async (req: Request, res: NextResponse) => {
   return NextResponse.json(new_user);
 }
 
-export const GET = async (req: Request, res: NextResponse) => {
-    const users = await prisma.schedules_tbl.findMany({
-      orderBy: {
-        id: "asc",
-      },
-    });
-    return NextResponse.json(users);
-}
+// export const GET = async (req: Request, res: NextResponse) => {
+//     const users = await prisma.schedules_tbl.findMany({
+//       where: {
+//         begin_time: {
+//           gte: new Date("2024-06-17"),
+//           lte: new Date("2024-06-23"),
+//         },
+//       },
+//     });
+//     return NextResponse.json(users);
+// }
