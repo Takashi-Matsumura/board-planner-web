@@ -3,22 +3,49 @@
 import Link from "next/link";
 import { FaRegSquarePlus, FaCirclePlus, FaCircleXmark } from "react-icons/fa6";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
-  helper: string;
-  customer: string;
+  helper_name: string;
+  customer_name: string;
   comment: string;
-  beginTime: string;
-  endTime: string;
+  begin_time: string;
+  end_time: string;
 };
 
 export default function SchedulePage() {
+  const addTimeZone = (date: string) => {
+    const timeZoneOffset = ":00+09:00";
+    return `${date}${timeZoneOffset}`;
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+
+  const router = useRouter();
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const { begin_time, end_time } = data;
+    const updatedBeginTime = addTimeZone(begin_time);
+    const updatedEndTime = addTimeZone(end_time);
+    data.begin_time = updatedBeginTime;
+    data.end_time = updatedEndTime;
+
+    const res = await fetch("/api/schedule", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const new_schedule = await res.json();
+
+    router.push("/board");
+    router.refresh();
+  };
 
   return (
     <div className="container mx-auto">
@@ -31,13 +58,13 @@ export default function SchedulePage() {
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
             <div className="flex flex-col items-center h-full mt-10 space-y-3">
               <input
-                {...register("helper")}
+                {...register("helper_name")}
                 type="text"
                 placeholder="Helper"
                 className="border-2 rounded-md p-2 w-2/3"
               />
               <input
-                {...register("customer")}
+                {...register("customer_name")}
                 type="text"
                 placeholder="Customer"
                 className="border-2 rounded-md p-2 w-2/3"
@@ -49,13 +76,13 @@ export default function SchedulePage() {
               />
               <div className="flex items-center justify-between w-2/3 pt-10">
                 <input
-                  {...register("beginTime")}
+                  {...register("begin_time")}
                   type="datetime-local"
                   placeholder="Begin Time"
                   className="border-2 rounded-md p-2 w-2/3"
                 />
                 <input
-                  {...register("endTime")}
+                  {...register("end_time")}
                   type="datetime-local"
                   placeholder="End Time"
                   className="border-2 rounded-md p-2 w-2/3"
