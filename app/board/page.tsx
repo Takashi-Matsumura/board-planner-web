@@ -14,6 +14,7 @@ import {
   groupByDayOfWeek,
   extractTime,
 } from "@/app/utils/datetime";
+import { useRouter } from "next/navigation";
 
 export default function BoardPage() {
   const [thisMonth, setThisMonth] = useState<number>(new Date().getMonth() + 1);
@@ -26,7 +27,7 @@ export default function BoardPage() {
     if (weekDays.length === 0) return;
 
     const date = formatDate(weekDays[0]);
-    const res = await fetch(`/api/schedule/${date}`);
+    const res = await fetch(`/api/schedule/week/${date}`);
     const data = await res.json();
 
     setSchedules(data);
@@ -54,6 +55,11 @@ export default function BoardPage() {
     setWeekly(weekly);
   }, [schedules]);
 
+  const router = useRouter();
+  const handleClick = (item: any) => {
+    router.push(`/schedule/${item.id}`);
+  };
+
   return (
     <div className="container mx-auto">
       <div className="flex flex-col items-center">
@@ -70,7 +76,11 @@ export default function BoardPage() {
             </div>
             <div className="overflow-auto h-full">
               {weekly[1]?.map((item: any) => (
-                <div className="flex flex-col border-2 rounded-md text-left p-2">
+                <div
+                  key={item.id}
+                  onDoubleClick={() => handleClick(item)}
+                  className="flex flex-col border-2 rounded-md text-left p-2"
+                >
                   <p className="text-sm">
                     {extractTime(item.begin_time)} -{" "}
                     {extractTime(item.end_time)}
@@ -90,7 +100,11 @@ export default function BoardPage() {
             </div>
             <div className="overflow-auto h-full">
               {weekly[2]?.map((item: any) => (
-                <div className="flex flex-col border-2 rounded-md text-left p-2">
+                <div
+                  key={item.id}
+                  onDoubleClick={() => handleClick(item)}
+                  className="flex flex-col border-2 rounded-md text-left p-2"
+                >
                   <p className="text-sm">
                     {extractTime(item.begin_time)} -{" "}
                     {extractTime(item.end_time)}
@@ -110,7 +124,11 @@ export default function BoardPage() {
             </div>
             <div className="overflow-auto h-full">
               {weekly[3]?.map((item: any) => (
-                <div className="flex flex-col border-2 rounded-md text-left p-2">
+                <div
+                  key={item.id}
+                  onDoubleClick={() => handleClick(item)}
+                  className="flex flex-col border-2 rounded-md text-left p-2"
+                >
                   <p className="text-sm">
                     {extractTime(item.begin_time)} -{" "}
                     {extractTime(item.end_time)}
@@ -130,7 +148,11 @@ export default function BoardPage() {
             </div>
             <div className="overflow-auto h-full">
               {weekly[4]?.map((item: any) => (
-                <div className="flex flex-col border-2 rounded-md text-left p-2">
+                <div
+                  key={item.id}
+                  onDoubleClick={() => handleClick(item)}
+                  className="flex flex-col border-2 rounded-md text-left p-2"
+                >
                   <p className="text-sm">
                     {extractTime(item.begin_time)} -{" "}
                     {extractTime(item.end_time)}
@@ -150,7 +172,11 @@ export default function BoardPage() {
             </div>
             <div className="overflow-auto h-full">
               {weekly[5]?.map((item: any) => (
-                <div className="flex flex-col border-2 rounded-md text-left p-2">
+                <div
+                  key={item.id}
+                  onDoubleClick={() => handleClick(item)}
+                  className="flex flex-col border-2 rounded-md text-left p-2"
+                >
                   <p className="text-sm">
                     {extractTime(item.begin_time)} -{" "}
                     {extractTime(item.end_time)}
@@ -170,7 +196,11 @@ export default function BoardPage() {
             </div>
             <div className="overflow-auto h-full">
               {weekly[6]?.map((item: any) => (
-                <div className="flex flex-col border-2 rounded-md text-left p-2">
+                <div
+                  key={item.id}
+                  onDoubleClick={() => handleClick(item)}
+                  className="flex flex-col border-2 rounded-md text-left p-2"
+                >
                   <p className="text-sm">
                     {extractTime(item.begin_time)} -{" "}
                     {extractTime(item.end_time)}
@@ -190,7 +220,11 @@ export default function BoardPage() {
             </div>
             <div className="overflow-auto h-full">
               {weekly[0]?.map((item: any) => (
-                <div className="flex flex-col border-2 rounded-md text-left p-2">
+                <div
+                  key={item.id}
+                  onDoubleClick={() => handleClick(item)}
+                  className="flex flex-col border-2 rounded-md text-left p-2"
+                >
                   <p className="text-sm">
                     {extractTime(item.begin_time)} -{" "}
                     {extractTime(item.end_time)}
