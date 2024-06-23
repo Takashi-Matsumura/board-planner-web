@@ -1,3 +1,4 @@
+
 // 週の開始日を月曜日とする（0=日曜日, 1=月曜日, ...）
 const weekStartsOn = 1;
 
@@ -68,22 +69,26 @@ function formatDate(date: Date): string {
       // begin_timeプロパティをDateオブジェクトに変換
       const date = new Date(item.begin_time);
       // getDay()メソッドで曜日のインデックスを取得（0が日曜日、6が土曜日）
-      const dayOfWeek = date.getUTCDay();
+      const dayOfWeek = date.getDay();
       // 対応する曜日の配列に要素を追加
       groupedByDayOfWeek[dayOfWeek].push(item);
-      console.log(dayOfWeek + " : " +item.begin_time);
     });
   
     return groupedByDayOfWeek;
   }
 
+  import moment from 'moment-timezone';
+
   function extractTime(dateTimeString: string): string {
+    const tokyoTime = moment.utc(dateTimeString).tz('Asia/Tokyo').format();
+    console.log(tokyoTime+ " : "+ dateTimeString)
+
     // Dateオブジェクトを作成
-    const date = new Date(dateTimeString);
+    const date = new Date(tokyoTime);
     // 時間を取得し、2桁になるように0を追加（padStartを使用）
-    const hours = String(date.getUTCHours()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
     // 分を取得し、2桁になるように0を追加（padStartを使用）
-    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
     // HH:MMの形式で結果を返す
     return `${hours}:${minutes}`;
   }
