@@ -10,13 +10,16 @@ export const GET = async (
 
     const beginDate = new Date(params.date);
     const endDate = new Date(beginDate.getTime() + 7 * 24 * 60 * 60 * 1000);
-    
+
     const users = await prisma.schedules_tbl.findMany({
       where: {
         begin_time: {
           gte: beginDate,
           lte: endDate,
         },
+      },
+      orderBy: {
+        begin_time: "asc",
       },
     });
     return NextResponse.json(users);

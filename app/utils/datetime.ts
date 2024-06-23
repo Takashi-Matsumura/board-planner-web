@@ -59,4 +59,34 @@ function formatDate(date: Date): string {
     return `${year}-${month}-${day}`;
   }
 
-export { getWeekRange, getCurrentWeekRange, getWeekRangeFromWeekNumber, formatDate };
+  function groupByDayOfWeek(data: Array<{ begin_time: string }>): Array<Array<{ begin_time: string }>> {
+    // 曜日ごとにデータを格納するための二次元配列を初期化（型を明示的に指定）
+    const groupedByDayOfWeek = Array.from({ length: 7 }, (): Array<{ begin_time: string }> => []);
+  
+    // 引数で受け取った配列をループ
+    data.forEach(item => {
+      // begin_timeプロパティをDateオブジェクトに変換
+      const date = new Date(item.begin_time);
+      // getDay()メソッドで曜日のインデックスを取得（0が日曜日、6が土曜日）
+      const dayOfWeek = date.getUTCDay();
+      // 対応する曜日の配列に要素を追加
+      groupedByDayOfWeek[dayOfWeek].push(item);
+      console.log(dayOfWeek + " : " +item.begin_time);
+    });
+  
+    return groupedByDayOfWeek;
+  }
+
+  function extractTime(dateTimeString: string): string {
+    // Dateオブジェクトを作成
+    const date = new Date(dateTimeString);
+    // 時間を取得し、2桁になるように0を追加（padStartを使用）
+    const hours = String(date.getUTCHours()).padStart(2, '0');
+    // 分を取得し、2桁になるように0を追加（padStartを使用）
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+    // HH:MMの形式で結果を返す
+    return `${hours}:${minutes}`;
+  }
+
+
+export { getWeekRange, getCurrentWeekRange, getWeekRangeFromWeekNumber, formatDate, groupByDayOfWeek, extractTime };
