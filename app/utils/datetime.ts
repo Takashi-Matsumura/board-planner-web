@@ -81,7 +81,6 @@ function formatDate(date: Date): string {
 
   function extractTime(dateTimeString: string): string {
     const tokyoTime = moment.utc(dateTimeString).tz('Asia/Tokyo').format();
-    console.log(tokyoTime+ " : "+ dateTimeString)
 
     // Dateオブジェクトを作成
     const date = new Date(tokyoTime);
