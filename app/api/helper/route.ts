@@ -14,3 +14,17 @@ export const GET = async (
     });
     return NextResponse.json(users);
 }
+
+export const POST = async (req: Request, res: NextResponse) => {
+  const { name, active } = await req.json();
+
+  const activeBoolean = active === "true";  
+
+  const new_user = await prisma.helper_tbl.create({
+    data: {
+        name,
+        active: activeBoolean,
+    },
+  });
+  return NextResponse.json(new_user);
+}

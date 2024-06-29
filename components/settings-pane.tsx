@@ -13,14 +13,17 @@ type Inputs = {
 
 export default function SettingsPane() {
   const [isReloading, setIsReloading] = useState<boolean>(false);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
   const [helpers, setHelpers] = useState<any[]>([]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [selectedHelper, setSelectedHelper] = useState<any | null>(null);
 
   const fetchHelpers = async () => {
+    setIsFetching(true);
     const res = await fetch("/api/helper/");
     const helpers = await res.json();
     setHelpers(helpers);
+    setIsFetching(false);
   };
 
   const {
@@ -50,7 +53,31 @@ export default function SettingsPane() {
     setSelectedHelper(null);
   };
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {};
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    if (selectedHelper) {
+      if (selectedId === null || selectedId <= 0) return;
+
+      const res = await fetch(`/api/helper/${selectedId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const edit_helper = await res.json();
+    } else {
+      const res = await fetch("/api/helper/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const helper = await res.json();
+    }
+
+    setIsReloading(true);
+  };
 
   return (
     <div className="container mx-auto">
@@ -58,7 +85,7 @@ export default function SettingsPane() {
         <h1 className="font-bold text-3xl my-10">Master Records</h1>
         <div className="flex w-full justify-between gap-10 h-screen">
           <div className="w-1/2 flex flex-col h-2/3 ">
-            <div className="flex items-center justify-around bg-gray-700 text-white">
+            <div className="flex items-center justify-around bg-gray-700 text-white text-lg">
               <p className="border w-full text-center">id</p>
               <p className="border w-full text-center">name</p>
               <p className="border w-full text-center">active</p>
@@ -69,9 +96,9 @@ export default function SettingsPane() {
                 key={helper.id}
                 className="flex items-center justify-around"
               >
-                <p className="border w-full text-center">{helper.id}</p>
-                <p className="border w-full text-center">{helper.name}</p>
-                <p className="border w-full text-center">
+                <p className="border w-full text-center py-2">{helper.id}</p>
+                <p className="border w-full text-center py-2">{helper.name}</p>
+                <p className="border w-full text-center py-2">
                   {helper.active ? "true" : "false"}
                 </p>
               </div>
@@ -117,32 +144,38 @@ export default function SettingsPane() {
                   </option>
                 </select>
               </div>
-              <div className="flex items-center justify-around mt-10">
-                {selectedHelper ? (
+              {isFetching ? (
+                <p className="text-2xl text-center w-full py-10">
+                  Data Fetching...
+                </p>
+              ) : (
+                <div className="flex items-center justify-around mt-10">
+                  {selectedHelper ? (
+                    <button
+                      type="submit"
+                      className="flex items-center justify-around gap-3 border-2 rounded-full px-5 py-3 w-36"
+                    >
+                      <FaCircleArrowUp className="text-3xl" />
+                      Update
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      className="flex items-center justify-around gap-3 border-2 rounded-full px-5 py-3 w-36"
+                    >
+                      <FaCirclePlus className="text-3xl" />
+                      Create
+                    </button>
+                  )}
                   <button
-                    type="submit"
+                    onClick={handleCancel}
                     className="flex items-center justify-around gap-3 border-2 rounded-full px-5 py-3 w-36"
                   >
-                    <FaCircleArrowUp className="text-3xl" />
-                    Update
+                    <FaCircleXmark className="text-3xl" />
+                    Cancel
                   </button>
-                ) : (
-                  <button
-                    type="submit"
-                    className="flex items-center justify-around gap-3 border-2 rounded-full px-5 py-3 w-36"
-                  >
-                    <FaCirclePlus className="text-3xl" />
-                    Create
-                  </button>
-                )}
-                <button
-                  onClick={handleCancel}
-                  className="flex items-center justify-around gap-3 border-2 rounded-full px-5 py-3 w-36"
-                >
-                  <FaCircleXmark className="text-3xl" />
-                  Cancel
-                </button>
-              </div>
+                </div>
+              )}
             </form>
           </div>
         </div>
