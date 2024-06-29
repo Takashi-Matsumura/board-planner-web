@@ -1,5 +1,4 @@
 import UserButton from "@/components/user-button";
-import Image from "next/image";
 import Link from "next/link";
 
 export default function HomePage() {
@@ -13,7 +12,7 @@ export default function HomePage() {
         >
           Login
         </Link>
-        <UserButton />
+        {/* <UserButton /> */}
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
+import SideBar from "@/components/side-bar";
 
 const noto_sans_jp = Noto_Sans_JP({ subsets: ["latin"] });
 
@@ -16,7 +17,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={noto_sans_jp.className}>{children}</body>
+      <body className={noto_sans_jp.className}>
+        <div className="flex h-screen items-center justify-center">
+          <SideBar />
+          {children}
+        </div>
+      </body>
     </html>
   );
 }

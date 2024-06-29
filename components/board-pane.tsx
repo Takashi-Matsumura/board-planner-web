@@ -256,9 +256,7 @@ export default function BoardPane() {
           <Link href="/schedule">
             <FaRegSquarePlus />
           </Link>
-          <Link href="/settings">
-            <SlSettings />
-          </Link>
+          <Link href="/settings">{/* <SlSettings /> */}</Link>
         </div>
       </div>
     </div>
