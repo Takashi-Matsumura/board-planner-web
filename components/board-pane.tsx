@@ -7,7 +7,6 @@ import {
   FaHouse,
   FaRegSquarePlus,
 } from "react-icons/fa6";
-import { SlSettings } from "react-icons/sl";
 import { useEffect, useState } from "react";
 import {
   getCurrentWeekRange,
@@ -15,14 +14,9 @@ import {
   groupByDayOfWeek,
   extractTime,
 } from "@/app/utils/datetime";
-import { redirect, useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function BoardPane() {
-  const { data: session, status } = useSession();
-  //   console.log(session, status);
-  //   if (!session) return redirect("/");
-
   const [thisMonth, setThisMonth] = useState<number>(new Date().getMonth() + 1);
   const [weekDays, setWeekDays] = useState<Date[]>([]);
   const [isReloading, setIsReloading] = useState<boolean>(false);
@@ -78,9 +72,7 @@ export default function BoardPane() {
             <FaCircleChevronRight />
           </div>
           <p>2024年 {thisMonth}月</p>
-          <Link href="/" className="flex w-1/5 justify-end">
-            <FaHouse />
-          </Link>
+          <div className="flex space-x-5 w-1/5 justify-end"></div>
         </div>
         <div className="flex w-full h-[80vh] space-x-1">
           <div className="border-2 w-full text-center h-[80vh] flex flex-col">

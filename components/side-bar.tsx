@@ -10,7 +10,7 @@ export default function SideBar() {
           <UserButton />
         </div>
         <Link
-          href="#"
+          href="/"
           className="flex items-center gap-2 font-semibold justify-center w-full"
           prefetch={false}
         >
