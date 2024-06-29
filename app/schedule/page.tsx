@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { FaRegSquarePlus, FaCirclePlus, FaCircleXmark } from "react-icons/fa6";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 type Inputs = {
   helper_name: string;
@@ -13,7 +13,7 @@ type Inputs = {
   end_time: string;
 };
 
-export default function SchedulePage() {
+export default async function SchedulePage() {
   const addTimeZone = (date: string) => {
     const timeZoneOffset = ":00+09:00";
     return `${date}${timeZoneOffset}`;

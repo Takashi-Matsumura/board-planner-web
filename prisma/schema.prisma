@@ -4,6 +4,9 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+// npx prisma migrate dev --name init
+// npx prisma generate
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -21,4 +24,11 @@ model schedules_tbl {
   comment       String? 
   begin_time    DateTime?
   end_time      DateTime?
+}
+
+model helper_tbl {
+  id            Int      @id @default(autoincrement())
+  created_at    DateTime @default(now())
+  name   String? 
+  active Boolean @default(true)
 }

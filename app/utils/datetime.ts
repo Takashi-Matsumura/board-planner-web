@@ -1,12 +1,13 @@
-
-// 週の開始日を月曜日とする（0=日曜日, 1=月曜日, ...）
 const weekStartsOn = 1;
 
-/**
- * 指定された日付が属する週の開始日と終了日を返す
- * @param date 指定日付（Dateオブジェクト）
- * @returns 週の開始日と終了日（Dateオブジェクトの配列）
- */
+function getWeekNumber(date: Date): number {
+  const startOfYear = new Date(date.getFullYear(), 0, 1);
+  const diff = date.getTime() - startOfYear.getTime();
+  const dayCount = diff / (1000 * 60 * 60 * 24);
+  const weekNumber = Math.ceil((dayCount + 1 - (startOfYear.getDay() || 7)) / 7);
+  return weekNumber;
+}
+
 function getWeekRange(date: Date): [Date, Date] {
   const dayOfWeek = date.getDay();
   const diff = (dayOfWeek < weekStartsOn ? 7 : 0) + dayOfWeek - weekStartsOn;
@@ -22,12 +23,11 @@ function getWeekRange(date: Date): [Date, Date] {
   return [start, end];
 }
 
-/**
- * 現在の週の開始日と終了日を返す
- * @returns 週の開始日と終了日（Dateオブジェクトの配列）
- */
-function getCurrentWeekRange(): [Date, Date] {
-  return getWeekRange(new Date());
+function getCurrentWeekRange(): [Date, Date, number] {
+  const now = new Date();
+  const [start, end] = getWeekRange(now);
+  const weekNumber = getWeekNumber(start);
+  return [start, end, weekNumber];
 }
 
 /**
@@ -93,4 +93,4 @@ function formatDate(date: Date): string {
   }
 
 
-export { getWeekRange, getCurrentWeekRange, getWeekRangeFromWeekNumber, formatDate, groupByDayOfWeek, extractTime };
+export { getWeekRange, getCurrentWeekRange, getWeekRangeFromWeekNumber, formatDate, groupByDayOfWeek, extractTime, getWeekNumber };
