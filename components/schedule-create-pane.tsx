@@ -13,7 +13,7 @@ type Inputs = {
   end_time: string;
 };
 
-export default async function ScheduleCreatePane() {
+export default function ScheduleCreatePane() {
   const addTimeZone = (date: string) => {
     const timeZoneOffset = ":00+09:00";
     return `${date}${timeZoneOffset}`;

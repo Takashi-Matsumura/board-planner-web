@@ -70,7 +70,7 @@ export default function BoardPane() {
   }, [schedules]);
 
   const handleChangeWeekNumber = (diff: number) => () => {
-    const week = weekNumber + diff;
+    const week = diff !== 0 ? weekNumber + diff : getWeekNumber(new Date());
 
     const [start, end] = getWeekRangeFromWeekNumber(thisYear, week);
     // console.log(start, end);
@@ -101,9 +101,7 @@ export default function BoardPane() {
             {thisYear}年 {thisMonth}月
           </p>
           <div className="flex space-x-5 w-1/5 justify-end">
-            <FaCircleChevronDown
-              onClick={() => setWeekNumber(getWeekNumber(new Date()))}
-            />
+            <FaCircleChevronDown onClick={handleChangeWeekNumber(0)} />
           </div>
         </div>
         <div className="flex w-full h-[80vh] space-x-1">

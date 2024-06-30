@@ -21,6 +21,7 @@ export const PUT = async (
   ) => {
     const id: number = parseInt(params.id);
     const { helper_name, customer_name, comment, begin_time, end_time } = await req.json();
+    //console.log(helper_name, customer_name, comment, begin_time, end_time)
   
     const schedule = await prisma.schedules_tbl.update({
         data: {
