@@ -24,8 +24,8 @@ function getWeekRange(date: Date): [Date, Date] {
 }
 
 function getCurrentWeekRange(): [Date, Date, number] {
-  const now = new Date();
-  const [start, end] = getWeekRange(now);
+  const today = new Date();
+  const [start, end] = getWeekRange(today);
   const weekNumber = getWeekNumber(start);
   return [start, end, weekNumber];
 }
@@ -38,16 +38,17 @@ function getCurrentWeekRange(): [Date, Date, number] {
  */
 function getWeekRangeFromWeekNumber(year: number, weekNumber: number): [Date, Date] {
   const janFirst = new Date(year, 0, 1);
-  const daysOffset = weekStartsOn - janFirst.getDay();
-  const startDate = new Date(year, 0, 1 + daysOffset + (weekNumber - 1) * 7);
-  if (daysOffset < 0) {
-    startDate.setDate(startDate.getDate() - 7);
-  }
-
+  // 1月1日が月曜日でない場合、最初の週の開始日を調整する
+  const daysOffset = (1 - janFirst.getDay() + 7) % 7; // 月曜日を週の開始とする
+  const weekStart = new Date(janFirst);
+  // 最初の週の開始日を設定
+  weekStart.setDate(janFirst.getDate() + daysOffset);
+  // 指定された週番号に基づいて、その週の開始日を計算
+  const startDate = new Date(weekStart);
+  startDate.setDate(weekStart.getDate() + (weekNumber - 1) * 7);
+  // 週の終了日（開始日から6日後）を計算
   const endDate = new Date(startDate);
   endDate.setDate(startDate.getDate() + 6);
-  endDate.setHours(23, 59, 59, 999);
-
   return [startDate, endDate];
 }
 

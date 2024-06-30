@@ -4,22 +4,25 @@ import Link from "next/link";
 import {
   FaCircleChevronLeft,
   FaCircleChevronRight,
-  FaHouse,
+  FaCircleChevronDown,
   FaRegSquarePlus,
 } from "react-icons/fa6";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   getCurrentWeekRange,
   formatDate,
   groupByDayOfWeek,
   extractTime,
+  getWeekNumber,
+  getWeekRangeFromWeekNumber,
 } from "@/app/utils/datetime";
 import { useRouter } from "next/navigation";
+import { set } from "react-hook-form";
 
 export default function BoardPane() {
   const [thisMonth, setThisMonth] = useState<number>(new Date().getMonth() + 1);
-  const [weekDays, setWeekDays] = useState<Date[]>([]);
-  const [isReloading, setIsReloading] = useState<boolean>(false);
+  const [thisYear, setThisYear] = useState<number>(new Date().getFullYear());
+  const [weekDays, setWeekDays] = useState<Date[]>([]); //週間データ
   const [schedules, setSchedules] = useState<any[]>([]);
   const [weekly, setWeekly] = useState<any[]>([]);
   const [weekNumber, setWeekNumber] = useState<number>(0);
@@ -34,28 +37,51 @@ export default function BoardPane() {
     setSchedules(data);
   };
 
-  useEffect(() => {
-    const [start, end, weekNumber] = getCurrentWeekRange();
+  const resetWeekDays = (start: Date, end: Date) => {
     const days = [];
-    let currentDate = start;
-
-    while (currentDate <= end) {
-      days.push(new Date(currentDate));
-      currentDate.setDate(currentDate.getDate() + 1);
+    while (start <= end) {
+      days.push(new Date(start));
+      start.setDate(start.getDate() + 1);
     }
-
     setWeekDays(days);
+  };
+
+  useEffect(() => {
+    const now = new Date();
+    const weekNumber = getWeekNumber(now);
     setWeekNumber(weekNumber);
+    const [start, end] = getWeekRangeFromWeekNumber(
+      now.getFullYear(),
+      weekNumber
+    );
+    setThisMonth(now.getMonth() + 1);
+    setThisYear(now.getFullYear());
+
+    resetWeekDays(start, end);
   }, []);
 
   useEffect(() => {
     fetchSchedule();
-  }, [isReloading, weekDays]);
+  }, [weekDays]);
 
   useEffect(() => {
     const weekly = groupByDayOfWeek(schedules);
     setWeekly(weekly);
   }, [schedules]);
+
+  const handleChangeWeekNumber = (diff: number) => () => {
+    const week = weekNumber + diff;
+
+    const [start, end] = getWeekRangeFromWeekNumber(thisYear, week);
+    // console.log(start, end);
+    // console.log(thisYear, week);
+
+    setWeekNumber(week);
+    setThisYear(start.getFullYear());
+    setThisMonth(start.getMonth() + 1);
+
+    resetWeekDays(start, end);
+  };
 
   const router = useRouter();
   const handleClick = (item: any) => {
@@ -67,12 +93,18 @@ export default function BoardPane() {
       <div className="flex flex-col items-center">
         <div className="flex text-3xl w-full justify-between mt-10 mb-5">
           <div className="flex space-x-5 w-1/5">
-            <FaCircleChevronLeft />
+            <FaCircleChevronLeft onClick={handleChangeWeekNumber(-1)} />
             <p>{weekNumber}週</p>
-            <FaCircleChevronRight />
+            <FaCircleChevronRight onClick={handleChangeWeekNumber(1)} />
           </div>
-          <p>2024年 {thisMonth}月</p>
-          <div className="flex space-x-5 w-1/5 justify-end"></div>
+          <p>
+            {thisYear}年 {thisMonth}月
+          </p>
+          <div className="flex space-x-5 w-1/5 justify-end">
+            <FaCircleChevronDown
+              onClick={() => setWeekNumber(getWeekNumber(new Date()))}
+            />
+          </div>
         </div>
         <div className="flex w-full h-[80vh] space-x-1">
           <div className="border-2 w-full text-center h-[80vh] flex flex-col">
@@ -85,7 +117,7 @@ export default function BoardPane() {
                 <div
                   key={item.id}
                   onDoubleClick={() => handleClick(item)}
-                  className="flex flex-col border-2 rounded-md text-left p-2"
+                  className="flex flex-col border rounded-md text-left p-2"
                 >
                   <p className="text-sm">
                     {extractTime(item.begin_time)} -{" "}
@@ -109,7 +141,7 @@ export default function BoardPane() {
                 <div
                   key={item.id}
                   onDoubleClick={() => handleClick(item)}
-                  className="flex flex-col border-2 rounded-md text-left p-2"
+                  className="flex flex-col border rounded-md text-left p-2"
                 >
                   <p className="text-sm">
                     {extractTime(item.begin_time)} -{" "}
@@ -133,7 +165,7 @@ export default function BoardPane() {
                 <div
                   key={item.id}
                   onDoubleClick={() => handleClick(item)}
-                  className="flex flex-col border-2 rounded-md text-left p-2"
+                  className="flex flex-col border rounded-md text-left p-2"
                 >
                   <p className="text-sm">
                     {extractTime(item.begin_time)} -{" "}
@@ -157,7 +189,7 @@ export default function BoardPane() {
                 <div
                   key={item.id}
                   onDoubleClick={() => handleClick(item)}
-                  className="flex flex-col border-2 rounded-md text-left p-2"
+                  className="flex flex-col border rounded-md text-left p-2"
                 >
                   <p className="text-sm">
                     {extractTime(item.begin_time)} -{" "}
@@ -181,7 +213,7 @@ export default function BoardPane() {
                 <div
                   key={item.id}
                   onDoubleClick={() => handleClick(item)}
-                  className="flex flex-col border-2 rounded-md text-left p-2"
+                  className="flex flex-col border rounded-md text-left p-2"
                 >
                   <p className="text-sm">
                     {extractTime(item.begin_time)} -{" "}
@@ -205,7 +237,7 @@ export default function BoardPane() {
                 <div
                   key={item.id}
                   onDoubleClick={() => handleClick(item)}
-                  className="flex flex-col border-2 rounded-md text-left p-2"
+                  className="flex flex-col border rounded-md text-left p-2"
                 >
                   <p className="text-sm">
                     {extractTime(item.begin_time)} -{" "}
@@ -229,7 +261,7 @@ export default function BoardPane() {
                 <div
                   key={item.id}
                   onDoubleClick={() => handleClick(item)}
-                  className="flex flex-col border-2 rounded-md text-left p-2"
+                  className="flex flex-col border rounded-md text-left p-2"
                 >
                   <p className="text-sm">
                     {extractTime(item.begin_time)} -{" "}
